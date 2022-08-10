@@ -38,3 +38,18 @@ GROUP by g.year
 HAVING COUNT(g.game) > 4
 ORDER BY avg_critic_score desc
 LIMIT 10
+
+--The num_games column convinces us that our new list of the critics' top games reflects years that had quite a few well-reviewed games rather than just one or two hits. 
+--Now I want to idently which years were dropped due to having four or less reviewed games.
+--I'm going to identify them so that maye one day I can trach down more game reviews for those years and determine if they are to be be considered as great years for video game releases.
+-- Select the year and avg_critic_score for those years that dropped off the list of critic favorites 
+-- Order the results from highest to lowest avg_critic_score
+
+SELECT year, avg_critic_score
+FROM top_critic_years
+EXCEPT
+SELECT year, avg_critic_score
+FROM top_critic_years_more_than_four_games
+ORDER BY avg_critic_score DESC
+
+
