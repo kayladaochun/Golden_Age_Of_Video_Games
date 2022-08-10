@@ -1,1 +1,27 @@
+--I started off my checking to see the top 10 best selling games.
 
+SELECT *
+FROM game_sales
+ORDER BY games_sold desc
+LIMIT 10
+
+--I used a Left Join with the Reviews table to gain more insight on the data to see how much of the data is null.
+--I found that less than 10% of the data is null which is okay to continue my calculations.
+
+SELECT COUNT(g.game)
+FROM game_sales g
+LEFT JOIN reviews r
+ON g.game = r.game
+WHERE critic_score IS NULL AND user_score IS NULL;
+
+--I now want to calculate the top 10 average critic score and rounded it to 2 decimal points. This will help me get closer to finding out the Golden Age of video games.
+--I used an Inner Join with the reviews to pull only data that matches both game_sales table and reviews table.
+--I want to group by the year and order the average critic scores from highest to lowest.
+
+SELECT g.year, ROUND(AVG(r.critic_score), 2) AS avg_critic_score
+FROM game_sales g
+INNER JOIN reviews r
+ON g.game = r.game
+GROUP by g.year
+ORDER BY avg_critic_score desc
+LIMIT 10
