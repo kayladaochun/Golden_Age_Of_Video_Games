@@ -93,3 +93,6 @@ ON c.year = u.year)
 GROUP BY year
 ORDER BY total_games_sold DESC
 
+--I found that the top years for total games sold were 2008, 1998, 2002.
+
+
