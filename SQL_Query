@@ -52,4 +52,44 @@ SELECT year, avg_critic_score
 FROM top_critic_years_more_than_four_games
 ORDER BY avg_critic_score DESC
 
+--Let's move on to looking at the opinions of the players.
+--I am now looking at user_score averages by year rather than critic_score averages.
+-- Select year, an average of user_score, and a count of games released in a given year, aliased and rounded
+-- Include only years with more than four reviewed games; group data by year
+-- Order data by avg_user_score, and limit to ten results
+
+SELECT g.year, 
+    ROUND(AVG(r.user_score), 2) AS avg_user_score, 
+    COUNT(g.game) AS num_games
+FROM game_sales g
+INNER JOIN reviews r 
+ON g.game = r. game
+GROUP BY g.year
+HAVING COUNT(g.game) > 4
+ORDER BY ROUND(AVG(r.user_score), 2) DESC
+LIMIT 10
+
+--I've got a list of the top ten years according to both critic reviews and user reviews. 
+--I'm going to find out if there are years that showed up on both table which would be excellent years for video games.
+-- Select the year results that appear on both tables
+
+SELECT u.year
+FROM top_critic_years_more_than_four_games AS c
+INNER JOIN top_user_years_more_than_four_games AS u
+ON c.year = u.year
+
+--Looks like 1998, 2002, and 2008 were the top 3 years amongst critics and players
+--Now I want to know which years were the best years for the makers
+-- Select year and sum of games_sold, aliased as total_games_sold; order results by total_games_sold descending
+-- Using a subquery to filter game_sales based on whether each year is in the list returned in the previous task
+
+SELECT year,
+    SUM(games_sold) AS total_games_sold
+FROM game_sales
+WHERE year IN (SELECT u.year
+FROM top_critic_years_more_than_four_games AS c
+INNER JOIN top_user_years_more_than_four_games AS u
+ON c.year = u.year)
+GROUP BY year
+ORDER BY total_games_sold DESC
 
