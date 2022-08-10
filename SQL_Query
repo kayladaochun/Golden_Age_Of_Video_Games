@@ -25,3 +25,16 @@ ON g.game = r.game
 GROUP by g.year
 ORDER BY avg_critic_score desc
 LIMIT 10
+
+
+--After running this query the year 1982 came up to be one of highest average critic score at a 9, which is round for an average so I am thinking there weren't a lot of games released that year.
+--To update my query I filtered the years based on four or more games released per year to see if 1982 is truly a great year for video games.
+
+SELECT g.year,  ROUND(AVG(r.critic_score), 2) AS avg_critic_score, COUNT(g.game) AS num_games
+FROM game_sales g
+INNER JOIN reviews r
+ON g.game = r.game
+GROUP by g.year
+HAVING COUNT(g.game) > 4
+ORDER BY avg_critic_score desc
+LIMIT 10
